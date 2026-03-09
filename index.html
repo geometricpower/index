@@ -20,8 +20,8 @@
       --radius:22px;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:#f5f7f6;color:var(--text);font-family:Inter,Arial,Helvetica,sans-serif;overflow:hidden}
-    #deck{position:relative;width:100vw;height:100vh}
+    html,body{margin:0;padding:0;background:#f5f7f6;color:var(--text);font-family:Inter,Arial,Helvetica,sans-serif;overflow:hidden;height:100%;width:100%;}
+    #deck{position:relative;width:100vw;height:100vh;background:#f5f7f6;}
     .slide{
       position:absolute;inset:0;display:none;
       padding:0;
@@ -36,6 +36,10 @@
         radial-gradient(circle at 100% 0%, rgba(11,122,75,.08), transparent 28%),
         radial-gradient(circle at 0% 100%, rgba(22,167,101,.07), transparent 25%),
         #fff;
+    }
+    /* make the frame fullscreen on large displays */
+    @media (min-width:1024px){
+      .frame{border-radius:32px;margin:12px;width:calc(100% - 24px);height:calc(100% - 24px);}
     }
     .header{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
     .header > div:first-child{width:100%;}
@@ -67,6 +71,12 @@
     
     .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px 16px 14px;box-shadow:var(--shadow)}
     .card.soft{background:var(--green-4)}
+    /* all text inside green-box (dark green background) is white */
+    .green-box{background:linear-gradient(160deg,var(--green),#0f8e58);color:#fff;border-radius:24px;padding:18px;box-shadow:var(--shadow)}
+    .green-box h3,.green-box .small,.green-box div{color:#fff;}
+    /* also force any direct text in green-box to white */
+    .green-box { color:#fff; }
+    
     .big-number{font-size:36px;font-weight:800;color:var(--green);line-height:1}
     .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-top:6px}
     .small{font-size:12px;color:var(--muted);line-height:1.4}
@@ -116,8 +126,6 @@
     .band{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
     .summary-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:12px}
     @media (min-width:500px){.summary-grid{grid-template-columns:repeat(3,1fr);}}
-    .green-box{background:linear-gradient(160deg,var(--green),#0f8e58);color:#fff;border-radius:24px;padding:18px;box-shadow:var(--shadow)}
-    .green-box h3{margin:0 0 6px;font-size:18px}
     .score-table{font-size:12px;overflow-x:auto;display:block;}
     .score-table td,.score-table th{padding:6px 4px;}
     .score-pill{display:inline-block;min-width:40px;text-align:center;border-radius:999px;padding:4px 6px;font-weight:800;background:var(--green-3);color:var(--green)}
@@ -185,8 +193,12 @@
       min-width:70px;
       text-align:center;
     }
-    /* scrollable tables on mobile */
     .scrollable-table{overflow-x:auto;margin:12px 0;}
+    /* remove the two specific pills from slide 1 only */
+    .slide:first-child .band .pill:nth-child(1),
+    .slide:first-child .band .pill:nth-child(2) {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -198,7 +210,7 @@
 </div>
 
 <div id="deck">
-  <!-- SLIDE 1: Executive summary (full) -->
+  <!-- SLIDE 1: Executive summary (full, with two pills removed) -->
   <section class="slide active">
     <div class="frame">
       <div class="accent-top"></div>
@@ -208,8 +220,7 @@
           <h1>ERPNext Implementation Partner Evaluation</h1>
           <div class="quote">A management brief on vendor fit, delivery risk, demo performance, and known commercial terms.</div>
           <div class="band">
-            <span class="pill">White background</span>
-            <span class="pill">Green accent theme</span>
+            <!-- the first two pills are hidden via CSS, leaving only the last two -->
             <span class="pill">Final decision aid</span>
             <span class="pill">March 2026</span>
           </div>
